@@ -1,0 +1,24 @@
+{
+  "@context": [
+    "https://www.w3.org/ns/did/v1",
+    "https://w3id.org/security/suites/jws-2020/v1"
+  ],
+  "id": "did:web:raw.githubusercontent.com:yerayrodriguez:connectaton:refs:heads:main:did1",
+  "verificationMethod": [
+    {
+      "id": "did:web:raw.githubusercontent.com:yerayrodriguez:connectaton:refs:heads:main:did1#key-0",
+      "type": "JsonWebKey2020",
+      "controller": "did:web:raw.githubusercontent.com:yerayrodriguez:connectaton:refs:heads:main:did1",
+      "publicKeyJwk": {
+        "kty": "EC",
+        "crv": "P-256",
+        "x": "uCnThCL8n8DJWR7x96rzXWpqXMEE4z0T4tr3F8IZmbc",
+        "y": "Wn4PdUVlCfQjvqaY0h7fkLLeWjEmDrpqgpbFPsn-WjM",
+        "alg": "ES256"
+      }
+    }
+  ],
+  "authentication": ["did:web:raw.githubusercontent.com:yerayrodriguez:connectaton:refs:heads:main:did1#key-0"],
+  "assertionMethod": ["did:web:raw.githubusercontent.com:yerayrodriguez:connectaton:refs:heads:main:did1#key-0"],
+  "keyAgreement": ["did:web:raw.githubusercontent.com:yerayrodriguez:connectaton:refs:heads:main:did1#key-0"]
+}
