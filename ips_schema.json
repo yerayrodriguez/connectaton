@@ -4,7 +4,7 @@
   "type": "object",
   "allOf": [
     {
-      "ref": "https://raw.githubusercontent.com/yerayrodriguez/connectaton/refs/heads/main/example-vc-schema.json"
+      "$ref": "https://raw.githubusercontent.com/yerayrodriguez/connectaton/refs/heads/main/example-vc-schema.json"
     },
     {
       "properties": {
