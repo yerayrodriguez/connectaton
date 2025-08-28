@@ -3,171 +3,344 @@
   "$id": "https://example.org/schemas/ips-bundle-simplified.schema.json",
   "title": "International Patient Summary (IPS) – Bundle document (simplified & permissive)",
   "type": "object",
-  "additionalProperties": true,
-  "required": ["resourceType", "type", "entry"],
-  "properties": {
-    "resourceType": { "const": "Bundle" },
-    "id": { "type": "string" },
-    "meta": { "type": "object", "additionalProperties": true },
-    "implicitRules": { "type": "string", "format": "uri" },
-    "language": { "type": "string" },
-    "identifier": { "$ref": "#/$defs/Identifier" },
-    "type": { "const": "document" },
-    "timestamp": { "type": "string" },
-    "total": { "type": "integer", "minimum": 0 },
-    "link": {
-      "type": "array",
-      "items": { "$ref": "#/$defs/BundleLink" }
+  "allOf": [
+    {
+      "ref": "https://raw.githubusercontent.com/yerayrodriguez/connectaton/refs/heads/main/example-vc-schema.json"
     },
-    "entry": {
-      "type": "array",
-      "minItems": 2,
-      "prefixItems": [
-        {
-          "allOf": [
-            { "$ref": "#/$defs/BundleEntry" },
-            {
+    {
+      "properties": {
+        "credentialSubject": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": [
+            "resourceType",
+            "type",
+            "entry"
+          ],
+          "properties": {
+            "resourceType": {
+              "const": "Bundle"
+            },
+            "id": {
+              "type": "string"
+            },
+            "meta": {
               "type": "object",
-              "required": ["resource"],
-              "properties": {
-                "resource": {
+              "additionalProperties": true
+            },
+            "implicitRules": {
+              "type": "string",
+              "format": "uri"
+            },
+            "language": {
+              "type": "string"
+            },
+            "identifier": {
+              "$ref": "#/$defs/Identifier"
+            },
+            "type": {
+              "const": "document"
+            },
+            "timestamp": {
+              "type": "string"
+            },
+            "total": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "link": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/BundleLink"
+              }
+            },
+            "entry": {
+              "type": "array",
+              "minItems": 2,
+              "prefixItems": [
+                {
                   "allOf": [
-                    { "$ref": "#/$defs/Resource" },
+                    {
+                      "$ref": "#/$defs/BundleEntry"
+                    },
                     {
                       "type": "object",
-                      "properties": { "resourceType": { "const": "Composition" } },
-                      "required": ["resourceType"]
+                      "required": [
+                        "resource"
+                      ],
+                      "properties": {
+                        "resource": {
+                          "allOf": [
+                            {
+                              "$ref": "#/$defs/Resource"
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "resourceType": {
+                                  "const": "Composition"
+                                }
+                              },
+                              "required": [
+                                "resourceType"
+                              ]
+                            }
+                          ]
+                        }
+                      }
                     }
                   ]
                 }
-              }
-            }
-          ]
-        }
-      ],
-      "items": { "$ref": "#/$defs/BundleEntry" },
-      "allOf": [
-        {
-          "description": "There must be exactly one Patient in the Bundle",
-          "contains": {
-            "type": "object",
-            "required": ["resource"],
-            "properties": {
-              "resource": {
-                "allOf": [
-                  { "$ref": "#/$defs/Resource" },
-                  {
+              ],
+              "items": {
+                "$ref": "#/$defs/BundleEntry"
+              },
+              "allOf": [
+                {
+                  "description": "There must be exactly one Patient in the Bundle",
+                  "contains": {
                     "type": "object",
-                    "properties": { "resourceType": { "const": "Patient" } },
-                    "required": ["resourceType"]
-                  }
-                ]
-              }
+                    "required": [
+                      "resource"
+                    ],
+                    "properties": {
+                      "resource": {
+                        "allOf": [
+                          {
+                            "$ref": "#/$defs/Resource"
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "resourceType": {
+                                "const": "Patient"
+                              }
+                            },
+                            "required": [
+                              "resourceType"
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "minContains": 1,
+                  "maxContains": 1
+                }
+              ]
+            },
+            "signature": {
+              "$ref": "#/$defs/Signature"
             }
-          },
-          "minContains": 1,
-          "maxContains": 1
+          }
         }
-      ]
-    },
-    "signature": { "$ref": "#/$defs/Signature" }
-  },
+      }
+    }
+  ],
   "$defs": {
-    "uri": { "type": "string", "format": "uri" },
+    "uri": {
+      "type": "string",
+      "format": "uri"
+    },
     "BundleLink": {
       "type": "object",
       "additionalProperties": true,
-      "required": ["relation", "url"],
+      "required": [
+        "relation",
+        "url"
+      ],
       "properties": {
-        "relation": { "type": "string" },
-        "url": { "$ref": "#/$defs/uri" }
+        "relation": {
+          "type": "string"
+        },
+        "url": {
+          "$ref": "#/$defs/uri"
+        }
       }
     },
     "BundleEntry": {
       "type": "object",
       "additionalProperties": true,
-      "required": ["resource"],
+      "required": [
+        "resource"
+      ],
       "properties": {
-        "link": { "type": "array", "items": { "$ref": "#/$defs/BundleLink" } },
-        "fullUrl": { "$ref": "#/$defs/uri" },
-        "resource": { "$ref": "#/$defs/Resource" }
+        "link": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/BundleLink"
+          }
+        },
+        "fullUrl": {
+          "$ref": "#/$defs/uri"
+        },
+        "resource": {
+          "$ref": "#/$defs/Resource"
+        }
       }
     },
     "Resource": {
       "type": "object",
       "additionalProperties": true,
-      "required": ["resourceType"],
+      "required": [
+        "resourceType"
+      ],
       "properties": {
-        "resourceType": { "type": "string" },
-        "id": { "type": "string" },
-        "meta": { "$ref": "#/$defs/Meta" },
-        "implicitRules": { "type": "string", "format": "uri" },
-        "language": { "type": "string" }
+        "resourceType": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "meta": {
+          "$ref": "#/$defs/Meta"
+        },
+        "implicitRules": {
+          "type": "string",
+          "format": "uri"
+        },
+        "language": {
+          "type": "string"
+        }
       }
     },
     "Meta": {
       "type": "object",
       "additionalProperties": true,
       "properties": {
-        "versionId": { "type": "string" },
-        "lastUpdated": { "type": "string" },
-        "source": { "type": "string" },
-        "profile": { "type": "array", "items": { "type": "string", "format": "uri" } },
-        "security": { "type": "array", "items": { "$ref": "#/$defs/Coding" } },
-        "tag": { "type": "array", "items": { "$ref": "#/$defs/Coding" } }
+        "versionId": {
+          "type": "string"
+        },
+        "lastUpdated": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "profile": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "security": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Coding"
+          }
+        },
+        "tag": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Coding"
+          }
+        }
       }
     },
     "Identifier": {
       "type": "object",
       "additionalProperties": true,
       "properties": {
-        "use": { "type": "string" },
-        "type": { "$ref": "#/$defs/CodeableConcept" },
-        "system": { "$ref": "#/$defs/uri" },
-        "value": { "type": "string" },
-        "assigner": { "$ref": "#/$defs/Reference" }
+        "use": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/CodeableConcept"
+        },
+        "system": {
+          "$ref": "#/$defs/uri"
+        },
+        "value": {
+          "type": "string"
+        },
+        "assigner": {
+          "$ref": "#/$defs/Reference"
+        }
       }
     },
     "Reference": {
       "type": "object",
       "additionalProperties": true,
       "properties": {
-        "reference": { "type": "string" },
-        "type": { "$ref": "#/$defs/uri" },
-        "identifier": { "$ref": "#/$defs/Identifier" },
-        "display": { "type": "string" }
+        "reference": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/uri"
+        },
+        "identifier": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "display": {
+          "type": "string"
+        }
       }
     },
     "Coding": {
       "type": "object",
       "additionalProperties": true,
       "properties": {
-        "system": { "$ref": "#/$defs/uri" },
-        "version": { "type": "string" },
-        "code": { "type": "string" },
-        "display": { "type": "string" },
-        "userSelected": { "type": "boolean" }
+        "system": {
+          "$ref": "#/$defs/uri"
+        },
+        "version": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "display": {
+          "type": "string"
+        },
+        "userSelected": {
+          "type": "boolean"
+        }
       }
     },
     "CodeableConcept": {
       "type": "object",
       "additionalProperties": true,
       "properties": {
-        "coding": { "type": "array", "items": { "$ref": "#/$defs/Coding" } },
-        "text": { "type": "string" }
+        "coding": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Coding"
+          }
+        },
+        "text": {
+          "type": "string"
+        }
       }
     },
     "Signature": {
       "type": "object",
       "additionalProperties": true,
       "properties": {
-        "type": { "type": "array", "items": { "$ref": "#/$defs/Coding" } },
-        "when": { "type": "string" },
-        "who": { "$ref": "#/$defs/Reference" },
-        "onBehalfOf": { "$ref": "#/$defs/Reference" },
-        "targetFormat": { "type": "string" },
-        "sigFormat": { "type": "string" },
-        "data": { "type": "string" }
+        "type": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Coding"
+          }
+        },
+        "when": {
+          "type": "string"
+        },
+        "who": {
+          "$ref": "#/$defs/Reference"
+        },
+        "onBehalfOf": {
+          "$ref": "#/$defs/Reference"
+        },
+        "targetFormat": {
+          "type": "string"
+        },
+        "sigFormat": {
+          "type": "string"
+        },
+        "data": {
+          "type": "string"
+        }
       }
     }
   }
