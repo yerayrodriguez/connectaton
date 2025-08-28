@@ -24,19 +24,25 @@
       "minItems": 2,
       "prefixItems": [
         {
-          "$ref": "#/$defs/BundleEntry",
-          "required": ["resource"],
-          "properties": {
-            "resource": {
-              "allOf": [
-                { "$ref": "#/$defs/Resource" },
-                {
-                  "properties": { "resourceType": { "const": "Composition" } },
-                  "required": ["resourceType"]
+          "allOf": [
+            { "$ref": "#/$defs/BundleEntry" },
+            {
+              "type": "object",
+              "required": ["resource"],
+              "properties": {
+                "resource": {
+                  "allOf": [
+                    { "$ref": "#/$defs/Resource" },
+                    {
+                      "type": "object",
+                      "properties": { "resourceType": { "const": "Composition" } },
+                      "required": ["resourceType"]
+                    }
+                  ]
                 }
-              ]
+              }
             }
-          }
+          ]
         }
       ],
       "items": { "$ref": "#/$defs/BundleEntry" },
@@ -51,6 +57,7 @@
                 "allOf": [
                   { "$ref": "#/$defs/Resource" },
                   {
+                    "type": "object",
                     "properties": { "resourceType": { "const": "Patient" } },
                     "required": ["resourceType"]
                   }
