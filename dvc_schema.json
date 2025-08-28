@@ -1,99 +1,199 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://example.org/schemas/who-dvc.schema.json",
   "title": "WHO Digital Vaccination Certificate (DVC) – ModelDVC",
   "type": "object",
-  "additionalProperties": false,
-
-  "required": ["name", "dob", "vaccineDetails"],
-  "properties": {
-    "name": { "type": "string", "description": "Full name" },
-    "dob":  { "type": "string", "format": "date", "description": "Date of birth" },
-    "sex":  { "type": "string", "description": "Administrative gender" },
-    "nationality": { "type": "string", "description": "Citizenship code" },
-    "nid":  { "type": "string", "description": "National identifier" },
-    "guardian": { "type": "string", "description": "Parent/Guardian name" },
-    "issuer": { "$ref": "#/$defs/Reference", "description": "Issuing Organization reference" },
-
-    "vaccineDetails": {
-      "type": "array",
-      "minItems": 1,
-      "description": "Per-dose vaccination details",
-      "items": { "$ref": "#/$defs/ModelVaccineDetails" }
+  "allOf": [
+    {
+      "$ref": "https://raw.githubusercontent.com/yerayrodriguez/connectaton/refs/heads/main/example-vc-schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "credentialSubject": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "dob", "vaccineDetails"],
+          "properties": {
+            "id": {
+              "description": "Defines a unique identifier of the credential subject",
+              "type": "string"
+            },
+            "name": {
+              "type": "string",
+              "description": "Full name"
+            },
+            "dob": {
+              "type": "string",
+              "format": "date",
+              "description": "Date of birth"
+            },
+            "sex": {
+              "type": "string",
+              "description": "Administrative gender"
+            },
+            "nationality": {
+              "type": "string",
+              "description": "Citizenship code"
+            },
+            "nid": {
+              "type": "string",
+              "description": "National identifier"
+            },
+            "guardian": {
+              "type": "string",
+              "description": "Parent/Guardian name"
+            },
+            "issuer": {
+              "$ref": "#/$defs/Reference",
+              "description": "Issuing Organization reference"
+            },
+            "vaccineDetails": {
+              "type": "array",
+              "minItems": 1,
+              "description": "Per-dose vaccination details",
+              "items": {
+                "$ref": "#/$defs/ModelVaccineDetails"
+              }
+            }
+          }
+        }
+      }
     }
-  },
-
+  ],
   "$defs": {
-    "uri": { "type": "string", "format": "uri" },
-
+    "uri": {
+      "type": "string",
+      "format": "uri"
+    },
     "Coding": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "system": { "$ref": "#/$defs/uri" },
-        "version": { "type": "string" },
-        "code": { "type": "string" },
-        "display": { "type": "string" },
-        "userSelected": { "type": "boolean" }
+        "system": {
+          "$ref": "#/$defs/uri"
+        },
+        "version": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "display": {
+          "type": "string"
+        },
+        "userSelected": {
+          "type": "boolean"
+        }
       }
     },
-
     "CodeableConcept": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "coding": { "type": "array", "items": { "$ref": "#/$defs/Coding" } },
-        "text": { "type": "string" }
+        "coding": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Coding"
+          }
+        },
+        "text": {
+          "type": "string"
+        }
       }
     },
-
     "Identifier": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "use": { "type": "string" },
-        "type": { "$ref": "#/$defs/CodeableConcept" },
-        "system": { "$ref": "#/$defs/uri" },
-        "value": { "type": "string" },
-        "assigner": { "$ref": "#/$defs/Reference" }
+        "use": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/CodeableConcept"
+        },
+        "system": {
+          "$ref": "#/$defs/uri"
+        },
+        "value": {
+          "type": "string"
+        },
+        "assigner": {
+          "$ref": "#/$defs/Reference"
+        }
       }
     },
-
     "Reference": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "reference": { "type": "string" },
-        "type": { "$ref": "#/$defs/uri" },
-        "identifier": { "$ref": "#/$defs/Identifier" },
-        "display": { "type": "string" }
+        "reference": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/uri"
+        },
+        "identifier": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "display": {
+          "type": "string"
+        }
       }
     },
-
     "Period": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "start": { "type": "string", "format": "date" },
-        "end":   { "type": "string", "format": "date" }
+        "start": {
+          "type": "string",
+          "format": "date"
+        },
+        "end": {
+          "type": "string",
+          "format": "date"
+        }
       }
     },
-
     "NonEmptyCodeableConcept": {
       "allOf": [
         { "$ref": "#/$defs/CodeableConcept" },
-        { "anyOf": [ { "required": ["text"] }, { "required": ["coding"] } ] },
         {
-          "if": { "required": ["coding"] },
-          "then": { "properties": { "coding": { "minItems": 1 } } }
+          "type": "object",
+          "anyOf": [
+            { "required": ["text"] },
+            { "required": ["coding"] }
+          ]
+        },
+        {
+          "type": "object",
+          "if": {
+            "type": "object",
+            "required": ["coding"]
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "coding": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "$ref": "#/$defs/Coding" }
+              }
+            }
+          }
         }
       ]
     },
-
     "ModelVaccineDetails": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["doseNumber", "disease", "vaccineClassification", "date", "manufacturer", "batchNo"],
+      "required": [
+        "doseNumber",
+        "disease",
+        "vaccineClassification",
+        "date",
+        "manufacturer",
+        "batchNo"
+      ],
       "properties": {
         "doseNumber": {
           "description": "Dose number",
